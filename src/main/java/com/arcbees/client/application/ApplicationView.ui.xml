@@ -5,7 +5,9 @@
 
     <g:HTMLPanel>
 
-        <g:SimplePanel ui:field="main"/>
-        
+        <g:SimplePanel ui:field="main">
+            <g:Label ui:field="username"/>
+        </g:SimplePanel>
+
     </g:HTMLPanel>
 </ui:UiBinder>
