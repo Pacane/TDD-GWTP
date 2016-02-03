@@ -42,4 +42,13 @@ public class ApplicationPresenterTest {
 
         verify(userService).saveUsername(A_USERNAME);
     }
+
+    @Test
+    public void saveUsername_displaysNewUsernameInView() {
+        given(userService.getUsername()).willReturn(A_USERNAME);
+
+        presenter.saveUsername(A_USERNAME);
+
+        verify(view).displayUsername(A_USERNAME);
+    }
 }

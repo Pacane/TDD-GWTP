@@ -44,6 +44,9 @@ public class ApplicationPresenter
     @Override
     public void saveUsername(String username) {
         userService.saveUsername(username);
+
+        String newName = userService.getUsername();
+        getView().displayUsername(newName);
     }
 
     @Override
