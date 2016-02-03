@@ -3,11 +3,9 @@
 
     <ui:with field="res" type="com.arcbees.client.resources.AppResources"/>
 
-    <g:HTMLPanel>
-
-        <g:SimplePanel ui:field="main">
-            <g:Label ui:field="username"/>
-        </g:SimplePanel>
-
+    <g:HTMLPanel ui:field="main">
+        <g:Label ui:field="username"/>
+        <g:TextBox ui:field="newName"/>
+        <g:Button ui:field="saveUsername">Save</g:Button>
     </g:HTMLPanel>
 </ui:UiBinder>

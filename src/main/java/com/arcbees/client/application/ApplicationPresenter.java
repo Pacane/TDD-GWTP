@@ -1,22 +1,27 @@
 package com.arcbees.client.application;
 
 import com.arcbees.client.application.services.UserService;
+import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
-import com.gwtplatform.mvp.client.proxy.Proxy;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
 public class ApplicationPresenter
-        extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy> {
-    interface MyView extends View {
+        extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy>
+        implements ApplicationUiHandlers {
+    interface MyView extends View, HasUiHandlers<ApplicationUiHandlers> {
         void displayUsername(String username);
     }
 
     @ProxyStandard
-    interface MyProxy extends Proxy<ApplicationPresenter> {
+    @NameToken(NameTokens.HOME)
+    interface MyProxy extends ProxyPlace<ApplicationPresenter> {
     }
 
     public static final NestedSlot SLOT_MAIN = new NestedSlot();
@@ -32,6 +37,13 @@ public class ApplicationPresenter
         super(eventBus, view, proxy, RevealType.Root);
 
         this.userService = userService;
+
+        getView().setUiHandlers(this);
+    }
+
+    @Override
+    public void saveUsername(String username) {
+        userService.saveUsername(username);
     }
 
     @Override
