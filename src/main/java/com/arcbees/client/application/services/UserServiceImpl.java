@@ -24,4 +24,9 @@ public class UserServiceImpl implements UserService {
     public void saveUsername(int userId, String username) {
         usernames.put(userId, username);
     }
+
+    @Override
+    public Map<Integer, String> getUsers() {
+        return usernames;
+    }
 }

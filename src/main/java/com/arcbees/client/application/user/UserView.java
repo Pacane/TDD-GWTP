@@ -1,4 +1,4 @@
-package com.arcbees.client.application;
+package com.arcbees.client.application.user;
 
 import javax.inject.Inject;
 
@@ -13,9 +13,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
-public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers>
-        implements ApplicationPresenter.MyView {
-    interface Binder extends UiBinder<Widget, ApplicationView> {
+public class UserView extends ViewWithUiHandlers<UserUiHandlers>
+        implements UserPresenter.MyView {
+    interface Binder extends UiBinder<Widget, UserView> {
     }
 
     @UiField
@@ -28,11 +28,11 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers>
     TextBox newName;
 
     @Inject
-    ApplicationView(
+    UserView(
             Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
-        bindSlot(ApplicationPresenter.SLOT_MAIN, main);
+        bindSlot(UserPresenter.SLOT_MAIN, main);
     }
 
     @Override

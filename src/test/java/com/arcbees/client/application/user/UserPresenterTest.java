@@ -1,10 +1,11 @@
-package com.arcbees.client.application;
+package com.arcbees.client.application.user;
 
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.arcbees.client.application.services.UserService;
+import com.arcbees.client.application.user.UserPresenter;
 import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -15,14 +16,14 @@ import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JukitoRunner.class)
-public class ApplicationPresenterTest {
+public class UserPresenterTest {
     private static final String A_USERNAME = "bobby";
     private static final int USER_ID = 23423890;
 
     @Inject
-    private ApplicationPresenter presenter;
+    private UserPresenter presenter;
     @Inject
-    private ApplicationPresenter.MyView view;
+    private UserPresenter.MyView view;
     @Inject
     private UserService userService;
     @Inject

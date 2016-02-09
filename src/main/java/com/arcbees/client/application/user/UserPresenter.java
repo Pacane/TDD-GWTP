@@ -1,4 +1,4 @@
-package com.arcbees.client.application;
+package com.arcbees.client.application.user;
 
 import com.arcbees.client.application.services.UserService;
 import com.arcbees.client.place.NameTokens;
@@ -14,16 +14,16 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
-public class ApplicationPresenter
-        extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy>
-        implements ApplicationUiHandlers {
-    interface MyView extends View, HasUiHandlers<ApplicationUiHandlers> {
+public class UserPresenter
+        extends Presenter<UserPresenter.MyView, UserPresenter.MyProxy>
+        implements UserUiHandlers {
+    interface MyView extends View, HasUiHandlers<UserUiHandlers> {
         void displayUsername(String username);
     }
 
     @ProxyStandard
-    @NameToken(NameTokens.HOME)
-    interface MyProxy extends ProxyPlace<ApplicationPresenter> {
+    @NameToken(NameTokens.USER)
+    interface MyProxy extends ProxyPlace<UserPresenter> {
     }
 
     public static final NestedSlot SLOT_MAIN = new NestedSlot();
@@ -32,7 +32,7 @@ public class ApplicationPresenter
     private final PlaceManager placeManager;
 
     @Inject
-    ApplicationPresenter(
+    UserPresenter(
             EventBus eventBus,
             MyView view,
             MyProxy proxy,
