@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.arcbees.client.application.services.UserService;
-import com.arcbees.client.application.user.UserPresenter;
 import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -60,13 +59,15 @@ public class UserPresenterTest {
     }
 
     @Test
-    public void saveUsername_displaysNewUsernameInView() {
+    public void saveUsername_navigatesToUsersPage() {
         mockCurrentPlaceRequest(USER_ID);
         given(userService.getUsername(USER_ID)).willReturn(A_USERNAME);
+        PlaceRequest usersPlaceRequest = new PlaceRequest.Builder()
+                .nameToken(NameTokens.USERS).build();
 
         presenter.saveUsername(A_USERNAME);
 
-        verify(view).displayUsername(A_USERNAME);
+        verify(placeManager).revealPlace(usersPlaceRequest);
     }
 
     private void mockCurrentPlaceRequest(int userId) {

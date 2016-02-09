@@ -65,7 +65,11 @@ public class UserPresenter
 
         userService.saveUsername(userId, username);
 
-        String newName = userService.getUsername(userId);
-        getView().displayUsername(newName);
+        PlaceRequest usersListPlace = new PlaceRequest.Builder()
+                .nameToken(NameTokens.USERS)
+                .build();
+
+        placeManager.revealPlace(usersListPlace);
+
     }
 }
