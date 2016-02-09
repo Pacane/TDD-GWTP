@@ -1,7 +1,7 @@
 package com.arcbees.client.application.services;
 
 public interface UserService {
-    String getUsername();
+    String getUsername(int userId);
 
-    void saveUsername(String username);
+    void saveUsername(int userId, String username);
 }

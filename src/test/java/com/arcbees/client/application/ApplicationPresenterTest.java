@@ -5,7 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.arcbees.client.application.services.UserService;
+import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.same;
@@ -14,19 +17,29 @@ import static org.mockito.Mockito.verify;
 @RunWith(JukitoRunner.class)
 public class ApplicationPresenterTest {
     private static final String A_USERNAME = "bobby";
+    private static final int USER_ID = 23423890;
 
     @Inject
     private ApplicationPresenter presenter;
     @Inject
     private ApplicationPresenter.MyView view;
     @Inject
-    UserService userService;
+    private UserService userService;
+    @Inject
+    private PlaceManager placeManager;
+
+    private PlaceRequest createPlaceRequestWithUserId(int userId) {
+        return new PlaceRequest.Builder()
+                .with(NameTokens.PARAM_ID, String.valueOf(userId))
+                .build();
+    }
 
     @Test
-    public void onBind_displayUsername() {
-        given(userService.getUsername()).willReturn(A_USERNAME);
+    public void prepareFromRequest_displayUsername() {
+        given(userService.getUsername(USER_ID)).willReturn(A_USERNAME);
+        PlaceRequest placeRequest = createPlaceRequestWithUserId(USER_ID);
 
-        presenter.onBind();
+        presenter.prepareFromRequest(placeRequest);
 
         verify(view).displayUsername(A_USERNAME);
     }
@@ -38,17 +51,25 @@ public class ApplicationPresenterTest {
 
     @Test
     public void saveUsername_delegatesToService() {
+        mockCurrentPlaceRequest(USER_ID);
+
         presenter.saveUsername(A_USERNAME);
 
-        verify(userService).saveUsername(A_USERNAME);
+        verify(userService).saveUsername(USER_ID, A_USERNAME);
     }
 
     @Test
     public void saveUsername_displaysNewUsernameInView() {
-        given(userService.getUsername()).willReturn(A_USERNAME);
+        mockCurrentPlaceRequest(USER_ID);
+        given(userService.getUsername(USER_ID)).willReturn(A_USERNAME);
 
         presenter.saveUsername(A_USERNAME);
 
         verify(view).displayUsername(A_USERNAME);
+    }
+
+    private void mockCurrentPlaceRequest(int userId) {
+        PlaceRequest placeRequest = createPlaceRequestWithUserId(userId);
+        given(placeManager.getCurrentPlaceRequest()).willReturn(placeRequest);
     }
 }

@@ -1,16 +1,27 @@
 package com.arcbees.client.application.services;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // Dummy implementation of a UserService
 public class UserServiceImpl implements UserService {
-    private String username = "Arcbees";
+    private Map<Integer, String> usernames;
 
-    @Override
-    public String getUsername() {
-        return username;
+    public UserServiceImpl() {
+        usernames = new HashMap<>();
+
+        usernames.put(1, "Arcbees");
+        usernames.put(2, "Joel");
+        usernames.put(3, "Olivier");
     }
 
     @Override
-    public void saveUsername(String username) {
-        this.username = username;
+    public String getUsername(int userId) {
+        return usernames.get(userId);
+    }
+
+    @Override
+    public void saveUsername(int userId, String username) {
+        usernames.put(userId, username);
     }
 }
