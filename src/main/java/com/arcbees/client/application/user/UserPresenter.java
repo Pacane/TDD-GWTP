@@ -70,6 +70,5 @@ public class UserPresenter
                 .build();
 
         placeManager.revealPlace(usersListPlace);
-
     }
 }
