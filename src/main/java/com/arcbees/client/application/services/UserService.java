@@ -8,4 +8,6 @@ public interface UserService {
     void saveUsername(int userId, String username);
 
     Map<Integer, String> getUsers();
+
+    void deleteUser(int userId);
 }

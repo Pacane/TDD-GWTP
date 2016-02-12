@@ -6,15 +6,15 @@ import com.arcbees.client.place.NameTokens;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import com.gwtplatform.mvp.shared.proxy.TokenFormatter;
 
-public class UsersView extends ViewImpl implements UsersPresenter.MyView {
+public class UsersView extends ViewWithUiHandlers<UsersViewUiHandlers> implements UsersPresenter.MyView {
     interface Binder extends UiBinder<Widget, UsersView> {
     }
 
@@ -41,6 +41,8 @@ public class UsersView extends ViewImpl implements UsersPresenter.MyView {
         usersList.clear();
 
         for (Integer userId : users.keySet()) {
+            HTMLPanel panel = new HTMLPanel("");
+
             Anchor linkToEdit = new Anchor();
 
             linkToEdit.setText(users.get(userId));
@@ -50,8 +52,14 @@ public class UsersView extends ViewImpl implements UsersPresenter.MyView {
                     .with(NameTokens.PARAM_ID, String.valueOf(userId)).build();
             linkToEdit.setHref("#" + tokenFormatter.toPlaceToken(placeToGo));
 
-            usersList.add(linkToEdit);
-            usersList.add(new HTML("<br/>"));
+            Button deleteButton = new Button();
+            deleteButton.setText("X");
+            deleteButton.addClickHandler(clickEvent -> getUiHandlers().deleteUser(userId));
+
+            panel.add(linkToEdit);
+            panel.add(deleteButton);
+
+            usersList.add(panel);
         }
     }
 }

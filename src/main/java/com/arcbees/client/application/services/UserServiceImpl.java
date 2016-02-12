@@ -3,11 +3,22 @@ package com.arcbees.client.application.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.arcbees.client.application.events.UserDeletedEvent;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+
 // Dummy implementation of a UserService
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, HasHandlers {
+    private final EventBus eventBus;
+
     private Map<Integer, String> usernames;
 
-    public UserServiceImpl() {
+    @Inject
+    public UserServiceImpl(EventBus eventBus) {
+        this.eventBus = eventBus;
+
         usernames = new HashMap<>();
 
         usernames.put(1, "Arcbees");
@@ -28,5 +39,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<Integer, String> getUsers() {
         return usernames;
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        usernames.remove(userId);
+        UserDeletedEvent.fire(this);
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> gwtEvent) {
+        eventBus.fireEventFromSource(gwtEvent, this);
     }
 }
