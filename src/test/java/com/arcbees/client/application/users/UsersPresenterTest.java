@@ -37,7 +37,7 @@ public class UsersPresenterTest {
     @Inject
     private UsersPresenter.MyView view;
     @Inject
-    ResourceDelegate<UserApi> userApiResourceDelegate;
+    private ResourceDelegate<UserApi> userApiResourceDelegate;
     @Inject
     private UserApi userApi;
 
@@ -51,14 +51,13 @@ public class UsersPresenterTest {
     @Test
     public void prepareFromRequest_displaysUsers_onSuccess() {
         PlaceRequest placeRequest = new PlaceRequest();
-        List<User> users = new ArrayList<>();
         givenDelegate(userApiResourceDelegate)
-                .fail()
+                .succeed().withResult(users)
                 .when().getUsers();
 
         presenter.prepareFromRequest(placeRequest);
 
-        verify(view).displayUsers(users);
+        verify(view).displayUsers(same(users));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.arcbees.client.gin;
 
+import com.arcbees.client.api.ConnectionErrorConsoleNotifier;
+import com.arcbees.client.api.ConnectionErrorNotifier;
 import com.arcbees.client.api.RestCallbackImpl;
 import com.arcbees.client.application.user.UserModule;
 import com.arcbees.client.application.users.UsersModule;
@@ -23,6 +25,7 @@ public class ClientModule extends AbstractPresenterModule {
         requestStaticInjection(RestCallbackImpl.class);
 
         bind(ResourceLoader.class).asEagerSingleton();
+        bind(ConnectionErrorNotifier.class).to(ConnectionErrorConsoleNotifier.class).asEagerSingleton();
 
         // DefaultPlaceManager Places
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.USERS);
