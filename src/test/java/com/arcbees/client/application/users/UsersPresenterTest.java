@@ -51,8 +51,9 @@ public class UsersPresenterTest {
     @Test
     public void prepareFromRequest_displaysUsers_onSuccess() {
         PlaceRequest placeRequest = new PlaceRequest();
+        List<User> users = new ArrayList<>();
         givenDelegate(userApiResourceDelegate)
-                .succeed().withResult(users)
+                .fail()
                 .when().getUsers();
 
         presenter.prepareFromRequest(placeRequest);

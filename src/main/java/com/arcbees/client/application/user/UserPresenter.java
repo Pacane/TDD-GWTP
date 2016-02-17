@@ -21,8 +21,6 @@ public class UserPresenter
         extends Presenter<UserPresenter.MyView, UserPresenter.MyProxy>
         implements UserUiHandlers {
     interface MyView extends View, HasUiHandlers<UserUiHandlers> {
-        void displayUsername(String username);
-
         void displayUser(User user);
     }
 

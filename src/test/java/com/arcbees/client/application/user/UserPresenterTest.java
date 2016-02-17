@@ -50,7 +50,7 @@ public class UserPresenterTest {
 
         presenter.prepareFromRequest(placeRequest);
 
-        verify(view).displayUsername(A_USERNAME);
+        verify(view).displayUser(same(user));
     }
 
     private PlaceRequest createPlaceRequestWithUserId(int userId) {
@@ -83,5 +83,14 @@ public class UserPresenterTest {
         presenter.saveUser(user);
 
         verify(placeManager).revealPlace(placeRequestToGoAfterSave);
+    }
+
+    @Test
+    public void saveUsername_revealsUsersPlace_onSuccess() {
+        User user = createUser(USER_ID, A_USERNAME);
+
+        presenter.saveUser(user);
+
+        verify(userApi).saveUser(eq(USER_ID), same(user));
     }
 }

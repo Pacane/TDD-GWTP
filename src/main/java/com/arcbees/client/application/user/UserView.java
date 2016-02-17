@@ -39,11 +39,6 @@ public class UserView extends ViewWithUiHandlers<UserUiHandlers>
     }
 
     @Override
-    public void displayUsername(String username) {
-        this.username.setText(username);
-    }
-
-    @Override
     public void displayUser(User user) {
         this.user = user;
         this.username.setText(user.getName());
