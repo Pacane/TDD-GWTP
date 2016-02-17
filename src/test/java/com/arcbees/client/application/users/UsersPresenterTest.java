@@ -40,6 +40,7 @@ public class UsersPresenterTest {
     ResourceDelegate<UserApi> userApiResourceDelegate;
     @Inject
     private UserApi userApi;
+
     private List<User> users = new ArrayList<>();
 
     @Before
@@ -72,7 +73,7 @@ public class UsersPresenterTest {
     }
 
     @Test
-    public void deleteUser_ddisplaysUsers_onSuccess() {
+    public void deleteUser_displaysUsers_onSuccess() {
         givenDelegate(userApiResourceDelegate)
                 .succeed().withResult(users)
                 .when().delete(USER_ID);
