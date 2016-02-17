@@ -58,7 +58,6 @@ public class UserPresenter
         userApiResourceDelegate.withCallback(new RestCallbackImpl<User>() {
             @Override
             public void onSuccess(User user) {
-                getView().displayUsername(user.getName());
                 getView().displayUser(user);
             }
         }).getUser(userId);
