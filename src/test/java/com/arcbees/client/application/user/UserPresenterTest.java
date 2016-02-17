@@ -1,18 +1,23 @@
 package com.arcbees.client.application.user;
 
 import org.jukito.JukitoRunner;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.arcbees.client.application.services.UserService;
+import com.arcbees.client.api.User;
+import com.arcbees.client.api.UserApi;
 import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.verify;
+
+import static com.gwtplatform.dispatch.rest.delegates.test.DelegateTestUtils.givenDelegate;
 
 @RunWith(JukitoRunner.class)
 public class UserPresenterTest {
@@ -24,9 +29,29 @@ public class UserPresenterTest {
     @Inject
     private UserPresenter.MyView view;
     @Inject
-    private UserService userService;
-    @Inject
     private PlaceManager placeManager;
+    @Inject
+    private ResourceDelegate<UserApi> userApiResourceDelegate;
+    @Inject
+    private UserApi userApi;
+
+    @Before
+    public void setUp() {
+        givenDelegate(userApiResourceDelegate).useResource(userApi);
+    }
+
+    @Test
+    public void prepareFromRequest_displayUsername() {
+        PlaceRequest placeRequest = createPlaceRequestWithUserId(USER_ID);
+        User user = createUser(USER_ID, A_USERNAME);
+        givenDelegate(userApiResourceDelegate)
+                .succeed().withResult(user)
+                .when().getUser(USER_ID);
+
+        presenter.prepareFromRequest(placeRequest);
+
+        verify(view).displayUsername(A_USERNAME);
+    }
 
     private PlaceRequest createPlaceRequestWithUserId(int userId) {
         return new PlaceRequest.Builder()
@@ -34,14 +59,11 @@ public class UserPresenterTest {
                 .build();
     }
 
-    @Test
-    public void prepareFromRequest_displayUsername() {
-        given(userService.getUsername(USER_ID)).willReturn(A_USERNAME);
-        PlaceRequest placeRequest = createPlaceRequestWithUserId(USER_ID);
-
-        presenter.prepareFromRequest(placeRequest);
-
-        verify(view).displayUsername(A_USERNAME);
+    private User createUser(int userId, String aUsername) {
+        User user = new User();
+        user.setId(userId);
+        user.setName(aUsername);
+        return user;
     }
 
     @Test
@@ -51,27 +73,15 @@ public class UserPresenterTest {
 
     @Test
     public void saveUsername_delegatesToService() {
-        mockCurrentPlaceRequest(USER_ID);
-
-        presenter.saveUsername(A_USERNAME);
-
-        verify(userService).saveUsername(USER_ID, A_USERNAME);
-    }
-
-    @Test
-    public void saveUsername_navigatesToUsersPage() {
-        mockCurrentPlaceRequest(USER_ID);
-        given(userService.getUsername(USER_ID)).willReturn(A_USERNAME);
-        PlaceRequest usersPlaceRequest = new PlaceRequest.Builder()
+        User user = createUser(USER_ID, A_USERNAME);
+        givenDelegate(userApiResourceDelegate)
+                .succeed().withResult(null)
+                .when().saveUser(eq(USER_ID), same(user));
+        PlaceRequest placeRequestToGoAfterSave = new PlaceRequest.Builder()
                 .nameToken(NameTokens.USERS).build();
 
-        presenter.saveUsername(A_USERNAME);
+        presenter.saveUser(user);
 
-        verify(placeManager).revealPlace(usersPlaceRequest);
-    }
-
-    private void mockCurrentPlaceRequest(int userId) {
-        PlaceRequest placeRequest = createPlaceRequestWithUserId(userId);
-        given(placeManager.getCurrentPlaceRequest()).willReturn(placeRequest);
+        verify(placeManager).revealPlace(placeRequestToGoAfterSave);
     }
 }

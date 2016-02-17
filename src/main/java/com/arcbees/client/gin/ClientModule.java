@@ -1,7 +1,6 @@
 package com.arcbees.client.gin;
 
-import com.arcbees.client.application.services.UserService;
-import com.arcbees.client.application.services.UserServiceImpl;
+import com.arcbees.client.api.RestCallbackImpl;
 import com.arcbees.client.application.user.UserModule;
 import com.arcbees.client.application.users.UsersModule;
 import com.arcbees.client.place.NameTokens;
@@ -19,9 +18,11 @@ public class ClientModule extends AbstractPresenterModule {
         install(new DefaultModule.Builder().tokenFormatter(RouteTokenFormatter.class).build());
         install(new UserModule());
         install(new UsersModule());
+        install(new DispatchModule());
+
+        requestStaticInjection(RestCallbackImpl.class);
 
         bind(ResourceLoader.class).asEagerSingleton();
-        bind(UserService.class).to(UserServiceImpl.class).asEagerSingleton();
 
         // DefaultPlaceManager Places
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.USERS);

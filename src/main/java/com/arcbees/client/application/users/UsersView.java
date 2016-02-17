@@ -1,7 +1,8 @@
 package com.arcbees.client.application.users;
 
-import java.util.Map;
+import java.util.List;
 
+import com.arcbees.client.api.User;
 import com.arcbees.client.place.NameTokens;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -37,24 +38,24 @@ public class UsersView extends ViewWithUiHandlers<UsersViewUiHandlers> implement
     }
 
     @Override
-    public void displayUsers(Map<Integer, String> users) {
+    public void displayUsers(List<User> users) {
         usersList.clear();
 
-        for (Integer userId : users.keySet()) {
+        for (User user: users) {
             HTMLPanel panel = new HTMLPanel("");
 
             Anchor linkToEdit = new Anchor();
 
-            linkToEdit.setText(users.get(userId));
+            linkToEdit.setText(user.getName());
 
             PlaceRequest placeToGo = new PlaceRequest.Builder()
                     .nameToken(NameTokens.USER)
-                    .with(NameTokens.PARAM_ID, String.valueOf(userId)).build();
+                    .with(NameTokens.PARAM_ID, String.valueOf(user.getId())).build();
             linkToEdit.setHref("#" + tokenFormatter.toPlaceToken(placeToGo));
 
             Button deleteButton = new Button();
             deleteButton.setText("X");
-            deleteButton.addClickHandler(clickEvent -> getUiHandlers().deleteUser(userId));
+            deleteButton.addClickHandler(clickEvent -> getUiHandlers().deleteUser(user.getId()));
 
             panel.add(linkToEdit);
             panel.add(deleteButton);

@@ -16,9 +16,11 @@
         <gwtp.version>1.6-SNAPSHOT</gwtp.version>
         <gin.version>2.1.2</gin.version>
         <gwt.style>OBF</gwt.style>
+        <gwt-jackson.version>0.10.1-SNAPSHOT</gwt-jackson.version>
         <jukito.version>1.4</jukito.version>
         <junit.version>4.12</junit.version>
         <assertj-core.version>3.3.0</assertj-core.version>
+        <jackson.version>2.4.1</jackson.version>
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
@@ -28,7 +30,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-
+        <gwtp-dispatch-rest.version>1.5.1</gwtp-dispatch-rest.version>
     </properties>
 
     <build>
@@ -96,6 +98,30 @@
             <artifactId>gwtp-mvp-client</artifactId>
             <version>${gwtp.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-rest</artifactId>
+            <version>${gwtp-dispatch-rest.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-rest-shared</artifactId>
+            <version>${gwtp-dispatch-rest.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform.extensions</groupId>
+            <artifactId>dispatch-rest-delegates</artifactId>
+            <version>${gwtp-dispatch-rest.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.nmorel.gwtjackson</groupId>
+            <artifactId>gwt-jackson</artifactId>
+            <version>0.11.1</version>
         </dependency>
 
         <!-- DI -->

@@ -3,6 +3,8 @@
         "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
 <module rename-to='Project'>
     <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.gwtplatform.dispatch.rest.DispatchRest"/>
+    <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
     <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
 
     <extend-configuration-property name="gin.ginjector.modules"

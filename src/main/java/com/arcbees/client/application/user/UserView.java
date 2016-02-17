@@ -2,6 +2,7 @@ package com.arcbees.client.application.user;
 
 import javax.inject.Inject;
 
+import com.arcbees.client.api.User;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -27,6 +28,8 @@ public class UserView extends ViewWithUiHandlers<UserUiHandlers>
     @UiField
     TextBox newName;
 
+    private User user;
+
     @Inject
     UserView(
             Binder uiBinder) {
@@ -40,8 +43,15 @@ public class UserView extends ViewWithUiHandlers<UserUiHandlers>
         this.username.setText(username);
     }
 
+    @Override
+    public void displayUser(User user) {
+        this.user = user;
+        this.username.setText(user.getName());
+    }
+
     @UiHandler("saveUsername")
     void onSaveClick(ClickEvent e) {
-        getUiHandlers().saveUsername(newName.getText());
+        user.setName(newName.getText());
+        getUiHandlers().saveUser(user);
     }
 }

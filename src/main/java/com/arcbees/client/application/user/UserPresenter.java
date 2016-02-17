@@ -1,9 +1,12 @@
 package com.arcbees.client.application.user;
 
-import com.arcbees.client.application.services.UserService;
+import com.arcbees.client.api.RestCallbackImpl;
+import com.arcbees.client.api.User;
+import com.arcbees.client.api.UserApi;
 import com.arcbees.client.place.NameTokens;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -19,6 +22,8 @@ public class UserPresenter
         implements UserUiHandlers {
     interface MyView extends View, HasUiHandlers<UserUiHandlers> {
         void displayUsername(String username);
+
+        void displayUser(User user);
     }
 
     @ProxyStandard
@@ -28,20 +33,20 @@ public class UserPresenter
 
     public static final NestedSlot SLOT_MAIN = new NestedSlot();
 
-    private final UserService userService;
     private final PlaceManager placeManager;
+    private final ResourceDelegate<UserApi> userApiResourceDelegate;
 
     @Inject
     UserPresenter(
             EventBus eventBus,
             MyView view,
             MyProxy proxy,
-            UserService userService,
-            PlaceManager placeManager) {
+            PlaceManager placeManager,
+            ResourceDelegate<UserApi> userApiResourceDelegate) {
         super(eventBus, view, proxy, RevealType.Root);
 
-        this.userService = userService;
         this.placeManager = placeManager;
+        this.userApiResourceDelegate = userApiResourceDelegate;
 
         getView().setUiHandlers(this);
     }
@@ -49,9 +54,14 @@ public class UserPresenter
     @Override
     public void prepareFromRequest(PlaceRequest request) {
         int userId = parseUserIdFromPlaceRequest(request);
-        String username = userService.getUsername(userId);
 
-        getView().displayUsername(username);
+        userApiResourceDelegate.withCallback(new RestCallbackImpl<User>() {
+            @Override
+            public void onSuccess(User user) {
+                getView().displayUsername(user.getName());
+                getView().displayUser(user);
+            }
+        }).getUser(userId);
     }
 
     private int parseUserIdFromPlaceRequest(PlaceRequest placeRequest) {
@@ -60,15 +70,16 @@ public class UserPresenter
     }
 
     @Override
-    public void saveUsername(String username) {
-        int userId = parseUserIdFromPlaceRequest(placeManager.getCurrentPlaceRequest());
+    public void saveUser(User user) {
+        userApiResourceDelegate.withCallback(new RestCallbackImpl<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                PlaceRequest usersListPlace = new PlaceRequest.Builder()
+                        .nameToken(NameTokens.USERS)
+                        .build();
 
-        userService.saveUsername(userId, username);
-
-        PlaceRequest usersListPlace = new PlaceRequest.Builder()
-                .nameToken(NameTokens.USERS)
-                .build();
-
-        placeManager.revealPlace(usersListPlace);
+                placeManager.revealPlace(usersListPlace);
+            }
+        }).saveUser(user.getId(), user);
     }
 }
