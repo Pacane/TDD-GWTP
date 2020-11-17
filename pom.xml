@@ -17,7 +17,7 @@
         <gin.version>2.1.2</gin.version>
         <gwt.style>OBF</gwt.style>
         <jukito.version>1.4</jukito.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <assertj-core.version>3.3.0</assertj-core.version>
 
         <!-- maven -->
