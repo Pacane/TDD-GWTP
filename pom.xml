@@ -18,7 +18,7 @@
         <gwt.style>OBF</gwt.style>
         <jukito.version>1.4</jukito.version>
         <junit.version>4.13.1</junit.version>
-        <assertj-core.version>3.3.0</assertj-core.version>
+        <assertj-core.version>3.27.7</assertj-core.version>
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
